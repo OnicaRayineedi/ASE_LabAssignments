@@ -1,1 +1,3 @@
 This is the first Lab Assignment which includes a Class Diagram of Chat Application and Burndown Charts that is Analytics Graphs of Three Milestones created in order to accomplish this Assignment
+
+LabAssignment_1 Wiki Link: https://github.com/OnicaRayineedi/ASE_LabAssignments/wiki/LabAssignment_1
