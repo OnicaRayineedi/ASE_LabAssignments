@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="" data-ng-app="GoogleDirection">
+<head>
+    <meta t="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Direct</title>
+
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAWhSE1HAi753_M8rcFTfcbBXUQInf8y6c&v=3.exp&sensor=true&amp;libraries=places"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"
+            type="application/javascript"></script>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
+
+    <style type='text/css'>
+        body{
+            background-image: url("background_1.jpg");
+            background-size: cover;
+        }
+        td {
+            font-size: 14px;
+            margin: 25px;
+            padding: 5px;
+            color: azure;
+        }
+        .col1 {
+            overflow: hidden;
+            float: left;
+            margin-top: 6%;
+            width: 41%;
+            left: 90%;
+            background-color: transparent;
+        }
+        .partition1 {
+            width: 50%;
+            float: left;
+        }
+        .partition2 {
+            width: 50%;
+            float: left;
+        }
+        .col2 {
+            overflow: hidden;
+            float: left;
+            width: 58%;
+            left: 1%;
+        }
+
+        #map-canvas {
+            width: 40vw;
+            height: 45vh;
+            padding-top: 40px;
+            padding-right: 40px;
+            padding-bottom: 60px;
+            padding-left: 70px;
+        }
+        .top-row > div {
+            float: left;
+            width: 30%;
+            margin-right: 3%;
+        }
+          </style>
+
+</head>
+<body class="Weather" style="position: fixed"><br/>
+<h2 align="center" style="color: azure">Welcome to Home Page</h2><hr align="center" width="30%">
+            <a href="Assign@1.html"><b style="color: azure">Logout</b></a>
+<br/>
+<div class="row ng-scope" ng-controller="googlemapoutput">
+    <div class="row" align="center">
+        <input type="text" ng-model="startlocation" id="startlocation" required=""
+               placeholder="Enter Starting Point" googleplace="" autocomplete="off" ng-blur="getWeatherStart()"
+               style="color: black;">
+        <input type="text" ng-model="endlocation" id="endlocation" required=""
+               placeholder="Enter Destination Point" googleplace="" autocomplete="off" ng-blur="getWeatherEnd()"
+               style="color: black;">
+        <button class="button" ng-click="calcRoute()"><b>Get Direction & Weather</b></button>
+        <br/>
+        <br/>
+    </div>
+    <div class="col2">
+        <div id="map-canvas"></div>
+    </div>
+    <div class="col1">
+        <div class="partition-wrap">
+            <div class="partition1">
+                <div class="form" style="padding: 10px; margin:20px;">
+                    <h5 style="font-family: 'Baskerville Old Face'; color: azure; font-size: large"><b><u>Source Weather</u></b></h5>
+                    <table>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <img ng-src="{{iconStart}}" style="alignment: right"/></td>
+                        </tr>
+                        <tr>
+                            <td align="left"><b>Sky :</b></td>
+                            <td align="left"> {{weatherStart}}</td>
+                        </tr>
+                        <tr>
+                            <td align="left"><b>Temperature(&#8457;) : </b></td>
+                            <td align="left"> {{tempStart}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="partition2">
+                <div class="form" style="padding: 10px; margin:20px;">
+                    <h5 style="font-family: 'Baskerville Old Face'; color: azure; font-size: large"><b><u>Destination Weather</u></b></h5>
+                    <table>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <img ng-src="{{iconEnd}}" style="alignment: center"/></td>
+                        </tr>
+                        <tr>
+                            <td align="left"><b>Sky : </b></td>
+                            <td align="left"> {{weatherEnd}}</td>
+                        </tr>
+                        <tr>
+                            <td align="left"><b>Temperature(&#8457;) : </b></td>
+                            <td align="left"> {{tempEnd}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    var googleDemo = angular.module('GoogleDirection', [])
+    googleDemo.directive('googleplace', function () {
+        return {
+            require: 'ngModel',
+            link: function (scope, element, attrs, model) {
+                var options = {
+                    types: [],
+                };
+                scope.gPlace = new google.maps.places.Autocomplete(element[0],
+                    options);
+                google.maps.event.addListener(scope.gPlace, 'place_changed',
+                    function () {
+                        scope.$apply(function () {
+                            model.$setViewValue(element.val());
+                        });
+                    });
+            }
+        };
+    });
+    googleDemo.controller('googlemapoutput', function ($scope, $http) {
+        var map;
+        var mapOptions;
+        var directionsDisplay = new google.maps.DirectionsRenderer({
+            draggable: true
+        });
+        var directionsService = new google.maps.DirectionsService();
+        $scope.initialize = function () {
+            var pos = new google.maps.LatLng(0, 0);
+            var mapOptions = {
+                zoom: 3,
+                center: pos
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+            map.set('styles', [
+                {
+                    "featureType": "all",
+                    "stylers": [
+                        {
+                            "saturation": 0
+                        },
+                        {
+                            "hue": "#e7ecf0"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "stylers": [
+                        {
+                            "saturation": -70
+                        }
+                    ]
+                },
+                {
+                    "featureType": "transit",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "stylers": [
+                        {
+                            "visibility": "simplified"
+                        },
+                        {
+                            "saturation": -60
+                        }
+                    ]
+                }
+            ])
+        };
+        $scope.initialize = function () {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var pos = new google.maps.LatLng(
+                    position.coords.latitude,
+                    position.coords.longitude);
+                var mapOptions = {
+                    zoom: 16,
+                    center: pos
+                };
+                map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map
+                });
+            });
+        };
+        $scope.calcRoute = function () {
+            var end = document.getElementById('endlocation').value;
+            var start = document.getElementById('startlocation').value;
+            var request = {
+                origin: start,
+                destination: end,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setMap(map);
+                    directionsDisplay.setDirections(response);
+                    console.log(status);
+                }
+            });
+        };
+        $scope.getWeatherEnd = function () {
+            var end = document.getElementById('endlocation').value;
+            $http.get('http://api.worldweatheronline.com/free/v2/weather.ashx?q=' + end + '&key=3e0e4ae54c6e84fece9764bb38542&format=json&tp=24&num_of_days=1').success(function (data1) {
+                $scope.tempEnd = data1.data.current_condition[0].temp_F;
+                $scope.iconEnd = data1.data.current_condition[0].weatherIconUrl[0].value;
+                $scope.weatherEnd = data1.data.current_condition[0].weatherDesc[0].value;
+                $scope.feelEnd = data1.data.current_condition[0].FeelsLikeF;
+            })
+        };
+        $scope.getWeatherStart = function () {
+            var start = document.getElementById('startlocation').value;
+            $http.get('http://api.worldweatheronline.com/free/v2/weather.ashx?q=' + start + '&key=3e0e4ae54c6e84fece9764bb38542&format=json&tp=24&num_of_days=1').success(function (data1) {
+                $scope.tempStart = data1.data.current_condition[0].temp_F;
+                $scope.iconStart = data1.data.current_condition[0].weatherIconUrl[0].value;
+                $scope.weatherStart = data1.data.current_condition[0].weatherDesc[0].value;
+                $scope.feelStart = data1.data.current_condition[0].FeelsLikeF;
+            })
+        };
+        google.maps.event.addDomListener(window, 'load', $scope.initialize);
+    });
+    $("#menu-close").click(function (e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+    // Opens the sidebar menu
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+</script>
