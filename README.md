@@ -2,3 +2,5 @@
 Home: https://github.com/OnicaRayineedi/ASE_LabAssignments/wiki
 
 LabAssignment_1: https://github.com/OnicaRayineedi/ASE_LabAssignments/wiki/LabAssignment_1
+
+LabAssignment_2: https://github.com/OnicaRayineedi/ASE_LabAssignments/wiki/LabAssignment_2
