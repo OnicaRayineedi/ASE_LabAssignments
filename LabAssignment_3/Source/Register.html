@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <style type="text/css">
+        body{
+            background-image: url("Background-4.jpg");
+            background-size: cover;
+        }
+        .Register{
+            width: 400px;
+            height: 500px;
+            background-color: rgba(0,0,0,0.3);
+            margin:0 auto;
+            margin-top: 65px;
+            padding-left: 20px;
+            padding-top: 15px;
+            border-radius: 20px;
+            -moz-border-radius: 20px;
+            -webkit-border-radius: 20px;
+            -o-border-radius:20px;
+            color: azure;
+        }
+        .Register[type="text"]{
+            width:230px;
+            height:50px;
+        }
+        .Register[type="email"]{
+            width:230px;
+            height:50px;
+        }
+        .Register[type="number"] {
+            width: 230px;
+            height: 50px;
+        }
+        .Register[type="password"] {
+            width: 230px;
+            height: 50px;
+        }
+
+    </style>
+</head>
+<script>
+    function validation1() {
+        if (localStorage)
+        {
+
+            form = document.forms["regform"];
+
+            var a = form["username"].value;
+            var d = form["password"].value;
+
+
+            localStorage.setItem('Uname', a);
+
+            localStorage.setItem('Pname', d);
+
+
+
+            return true;
+
+        }
+
+    }
+</script>
+<body>
+<div class="Register">
+    <form class="form" name="regform" method="post">
+        <p><font size="6">Please Enter your details</font></p>
+        <p><font size="4.5">Name:</p>
+        <input type="text" name="username" placeholder="Username"><br>
+        <p>Mail ID:</p>
+        <input type="email" name="email" placeholder="Email"><br>
+        <p>Mobile:</p>
+        <input type="number" name="number" placeholder="Mobile"><br>
+        <p>Password:</p>
+        <input type="Password" name="password" placeholder="Password"><br>
+        <p>Re-Enter Password</p>
+        <input type="password" name="confirm password" placeholder="Confirm Password"><br><br>
+        <a href="login.html"><input type="button" value="Register" onclick="validation1()"></a><br>
+    </form>
+</div>
+
+</body>
+</html>
