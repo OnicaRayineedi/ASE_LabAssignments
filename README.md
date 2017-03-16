@@ -13,4 +13,7 @@ LabAssignment_5: https://github.com/OnicaRayineedi/ASE_LabAssignments/wiki/LabAs
 
 LabAssignment_6: https://github.com/OnicaRayineedi/ASE_LabAssignments/wiki/LabAssignment_6 
 
-Labssignment_7: https://github.com/OnicaRayineedi/ASE_LabAssignments/wiki/LabAssignment_7 
+LabAssignment_7: https://github.com/OnicaRayineedi/ASE_LabAssignments/wiki/LabAssignment_7 
+
+LabAssignment_8: https://github.com/OnicaRayineedi/ASE_LabAssignments/wiki/LabAssignment_8 
+
